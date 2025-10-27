@@ -9,4 +9,7 @@ dill
 pyaml
 mlflow==2.12.2 
 dagshub
+fastapi
+uvicorn
+python-multipart
 ##-e .

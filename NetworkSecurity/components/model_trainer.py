@@ -22,7 +22,7 @@ import mlflow
 from urllib.parse import urlparse
 
 import dagshub
-dagshub.init(repo_owner='arpitv0710', repo_name='networksecurity_ml', mlflow=True)
+#dagshub.init(repo_owner='arpitv0710', repo_name='networksecurity_ml', mlflow=True)
 
 
 
