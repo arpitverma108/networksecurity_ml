@@ -1,2 +1,2 @@
 conda activate networksecurtiy
-arpit
+uvicorn app:app --reload

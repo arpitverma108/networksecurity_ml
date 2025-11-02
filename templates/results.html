@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results - Phishing Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .prediction-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .safe {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .phishing {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .data-table tr:hover {
+            background: #e9ecef;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .summary {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .summary-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .summary-card h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .summary-card .count {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .safe-count { color: #28a745; }
+        .phishing-count { color: #dc3545; }
+        .total-count { color: var(--primary); }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .results-header h2 {
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .success-alert {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .warning-alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .summary {
+                flex-direction: column;
+            }
+            
+            .summary-card {
+                min-width: 100%;
+            }
+            
+            .data-table {
+                font-size: 0.8rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-bar"></i> Prediction Results</h1>
+            <p>Analysis completed successfully</p>
+        </div>
+
+        <div class="success-alert">
+            <i class="fas fa-check-circle"></i> 
+            <strong>Success!</strong> Your phishing detection analysis has been completed.
+        </div>
+
+        <div class="results-card">
+            <div class="results-header">
+                <h2><i class="fas fa-list-check"></i> Prediction Summary</h2>
+            </div>
+            
+            {% if total_count is defined %}
+            <div class="summary">
+                <div class="summary-card">
+                    <h3>Total URLs Analyzed</h3>
+                    <div class="count total-count">{{ total_count }}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Safe URLs</h3>
+                    <div class="count safe-count">{{ safe_count }}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Phishing URLs</h3>
+                    <div class="count phishing-count">{{ phishing_count }}</div>
+                </div>
+            </div>
+            {% else %}
+            <div class="warning-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>No data to display.</strong> The prediction was successful but no results were returned.
+            </div>
+            {% endif %}
+
+            <h3 style="margin-top: 20px; margin-bottom: 15px;"><i class="fas fa-table"></i> Detailed Results</h3>
+            <div class="table-container">
+                {% if table %}
+                    {{ table | safe }}
+                {% else %}
+                    <div class="warning-alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>No table data available.</strong> The prediction completed but no detailed results could be displayed.
+                    </div>
+                {% endif %}
+            </div>
+
+            <button class="back-btn" onclick="window.location.href='/'">
+                <i class="fas fa-arrow-left"></i> Back to Analyzer
+            </button>
+            
+            <a href="/prediction_output/output.csv" download class="back-btn" style="margin-left: 10px; background: #28a745;">
+                <i class="fas fa-download"></i> Download Results
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Add color coding to prediction results
+        document.addEventListener('DOMContentLoaded', function() {
+            const cells = document.querySelectorAll('td');
+            cells.forEach(cell => {
+                // Look for predicted_column values
+                const cellText = cell.textContent.trim();
+                if (cellText === '1') {
+                    cell.innerHTML = '<span class="prediction-badge safe"><i class="fas fa-check-circle"></i> Safe</span>';
+                } else if (cellText === '0') {
+                    cell.innerHTML = '<span class="prediction-badge phishing"><i class="fas fa-exclamation-triangle"></i> Phishing</span>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
