@@ -254,8 +254,6 @@ The project uses **MLflow** and **DagsHub** for experiment tracking.
 mlflow ui
 ```
 
-Navigate to: `http://localhost:5000`
-
 ### **Tracked Metrics**
 - F1-Score
 - Precision
